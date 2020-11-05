@@ -1,5 +1,7 @@
 ### CarDealer Platform
 
+<img src="https://raw.githubusercontent.com/mehdishahdoost/rhdhv/dev/shot/shot.png" width="500" height="300"/>
+
 #### Tech Stack
 
 
