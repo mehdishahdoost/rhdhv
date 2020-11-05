@@ -24,6 +24,14 @@
 
 ### How to build the project
 
+#### Pre Requirements
+
+MongoDB database
+
+<pre>
+docker run -d --name local-mongo  -e MONGO_INITDB_ROOT_USERNAME=  -e MONGO_INITDB_ROOT_PASSWORD= -p 27017:27017 mongo
+</pre>
+
 #### run envoy proxy
 
 <pre>
