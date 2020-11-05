@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+message Car {
+  string brand = 1;
+  string model = 2;
+  int32 releaseYear = 3;
+  float annualMaintenanceCost = 4;
+  string make = 5;
+  float fuelConsumption = 6;
+  string version = 7;
+  float price = 8;
+}
+
+message GeneralResponse {
+  string message = 1;
+  bool failed = 2;
+}
+
+message CarsResponse {
+  int32 totalPage = 1;
+  repeated Car cars = 2;
+}
+
+message CarRequest {
+  int32 pgSize = 1;
+  int32 pgNum = 2;
+  string searchText = 3;
+  enum SearchFilter {
+    YEAR = 0;
+    BRAND = 1;
+  }
+  SearchFilter filter = 4;
+  int32 count = 6;
+}
+
+message RecommendationRequest {
+  int32 pgSize = 1;
+  int32 pgNum = 2;
+  int32 monthlyDistance = 3;
+  int32 fuelPrice = 4;
+  int32 count = 5;
+}
+
+service CarService {
+  rpc addCar(Car) returns (GeneralResponse);
+  rpc getCars(CarRequest) returns (CarsResponse);
+  rpc getRecommendationCars(RecommendationRequest) returns (CarsResponse);
+}

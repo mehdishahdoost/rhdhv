@@ -18,18 +18,18 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
     const classes = useStyles();
-
     return (
         <Router>
             <Navbar/>
             <div className={classes.margin}>
                 <div className={classes.root}>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/addCar" component={AddCar} />
+                    <Route path="/" exact component={Home}/>
+                    <Route path="/login" component={Login}/>
+                    <Route path="/addCar" component={AddCar}/>
                 </div>
             </div>
         </Router>
     );
 }
+
 export default App;

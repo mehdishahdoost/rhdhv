@@ -5,6 +5,7 @@ import CarCard from "./CarCard";
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Pagination from '@material-ui/lab/Pagination';
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -24,8 +25,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function Home() {
+function Home(props) {
     const classes = useStyles();
+    function pageHandler(event, value) {
+
+    }
     return (
         <Grid container spacing={3}>
             <Grid item xs={3} className={classes.recommendation}>
@@ -36,12 +40,9 @@ function Home() {
             <Grid item xs={9}>
                 <Paper className={classes.paper}>
                     <div className={classes.cardPanel}>
-                        <CarCard/>
-                        <CarCard/>
-                        <CarCard/>
-                        <CarCard/>
-                        <CarCard/>
-                        <CarCard/>
+                        {props.cars.length > 0 && props.cars.map(val => {
+                            return <CarCard car={val}/>
+                        })}
                     </div>
                     <Grid
                         container
@@ -52,7 +53,7 @@ function Home() {
                         style={{minWidth: '100vh'}}
                     >
                         <Grid item xs={12}>
-                            <Pagination count={10} color="secondary"/>
+                            <Pagination count={props.totalPage} color="secondary" onChange={pageHandler}/>
                         </Grid>
                     </Grid>
                 </Paper>
@@ -61,4 +62,8 @@ function Home() {
     )
 }
 
-export default Home;
+function mapStateToProps(state) {
+    return {cars: state.cars, totalPage: state.totalPage}
+}
+
+export default connect(mapStateToProps)(Home);

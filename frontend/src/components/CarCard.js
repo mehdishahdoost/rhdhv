@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function CarCard() {
+function CarCard(props) {
     const classes = useStyles();
     return (
         <Paper className={classes.paper}>
@@ -34,31 +34,31 @@ function CarCard() {
                     <TableBody>
                         <TableRow>
                             <TableCell>Model</TableCell>
-                            <TableCell>Honda Fit 2020</TableCell>
+                            <TableCell>{props.car[1]}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Brand</TableCell>
-                            <TableCell>Honda</TableCell>
+                            <TableCell>{props.car[0]}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Y.O.Release</TableCell>
-                            <TableCell>2020</TableCell>
+                            <TableCell>{props.car[2]}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Version</TableCell>
-                            <TableCell>2020</TableCell>
+                            <TableCell>{props.car[6]}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Fuel Consumption</TableCell>
-                            <TableCell>1 L/KM</TableCell>
+                            <TableCell>{props.car[5]} L/KM</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Annual Maintenance</TableCell>
-                            <TableCell>200€</TableCell>
+                            <TableCell>{props.car[3]}€</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Price</TableCell>
-                            <TableCell>2249€</TableCell>
+                            <TableCell>{props.car[7]}€</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

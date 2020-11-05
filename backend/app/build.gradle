@@ -1,0 +1,104 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.12"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
+
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+    id 'application'
+    id 'com.google.protobuf' version "0.8.12"
+    id 'idea'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation platform('org.jetbrains.kotlin:kotlin-bom')
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'com.google.guava:guava:29.0-jre'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
+    implementation "javax.annotation:javax.annotation-api:1.2"
+    implementation("org.litote.kmongo:kmongo-coroutine:4.1.1")
+    implementation "com.google.protobuf:protobuf-java:3.12.2"
+    implementation "com.google.protobuf:protobuf-java-util:3.12.2"
+    implementation "io.grpc:grpc-netty-shaded:1.29.0"
+    implementation "io.grpc:grpc-protobuf:1.29.0"
+    implementation "io.grpc:grpc-stub:1.29.0"
+    implementation "io.grpc:grpc-kotlin-stub:0.1.3"
+    implementation 'io.github.microutils:kotlin-logging-jvm:2.0.2'
+    compile 'org.slf4j:slf4j-log4j12:1.7.30'
+    compile "com.natpryce:konfig:1.6.10.0"
+    testCompile "io.grpc:grpc-testing:1.33.1"
+    implementation platform('org.testcontainers:testcontainers-bom:1.14.3')
+    testImplementation "org.testcontainers:junit-jupiter:1.14.3"
+    testCompile group: 'org.testcontainers', name: 'mongodb', version: '1.14.3'
+
+}
+
+application {
+    mainClass = 'com.rhdhv.cardealer.GrpcServerKt'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.12.2"
+    }
+
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.29.0"
+        }
+
+        grpckt {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:0.1.3"
+        }
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                // Generate Java gRPC classes
+                grpc { }
+                // Generate Kotlin gRPC using the custom plugin from library
+                grpckt { }
+            }
+        }
+    }
+
+    sourceCompatibility = 1.8
+    compileKotlin {
+        kotlinOptions {
+            freeCompilerArgs = ["-Xjsr305=strict"]
+            jvmTarget = "1.8"
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            freeCompilerArgs = ["-Xjsr305=strict"]
+            jvmTarget = "1.8"
+        }
+    }
+
+    jar {
+        manifest {
+            attributes "Main-Class": "com.rhdhv.cardealer.GrpcServerKt"
+        }
+
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+}
