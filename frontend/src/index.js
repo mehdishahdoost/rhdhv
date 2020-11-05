@@ -3,12 +3,32 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from "react-redux";
+import {createStore} from "redux";
+
+const initialState = {
+    cars : {
+        totalPage: 0,
+        cars: []
+    }
+}
+
+function reducer(state = initialState, action) {
+    switch (action.type) {
+        case "FETCH_CARS":
+            return action.payload
+        default:
+            return state
+    }
+}
+
+const store = createStore(reducer)
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <Provider store={store}>
+        <App/>
+    </Provider>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

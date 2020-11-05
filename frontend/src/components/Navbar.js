@@ -5,12 +5,15 @@ import InputBase from "@material-ui/core/InputBase";
 import {fade} from "@material-ui/core";
 import {AccountCircle, AddRounded} from "@material-ui/icons";
 import Toolbar from "@material-ui/core/Toolbar";
-import React from "react";
+import React, {useEffect} from "react";
 import SearchIcon from '@material-ui/icons/Search';
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
+import {CarServiceClient} from "../proto/car_grpc_web_pb";
+import {CarRequest} from "../proto/car_pb";
+import {connect} from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -96,8 +99,43 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Navbar() {
+function Navbar(props) {
     const classes = useStyles();
+    const srv = new CarServiceClient(process.env.REACT_APP_ENVOY_PROXY_URL)
+    const [search, setSearch] = React.useState("0")
+    useEffect(()=> {
+        handleChange({target: {value: ""}})
+    })
+    function handleSelect(evt) {
+        const value = evt.target.value;
+        setSearch(value)
+    }
+
+    function handleChange(evt) {
+        const value = evt.target.value;
+        if (value.length > 2 || value.length == 0) {
+            var request = new CarRequest();
+            request.setSearchtext(value);
+            request.setFilter(search);
+            request.setCount(0);
+            request.setPgsize(5)
+            request.setPgnum(1);
+            srv.getCars(request, {}, (err, response) => {
+                if (err != null) {
+                    console.log(err)
+                } else {
+                    props.dispatch({
+                        type: "FETCH_CARS",
+                        payload: {
+                            totalPage: response.array[0],
+                            cars: response.array[1]
+                        }
+                    })
+                }
+            })
+        }
+    }
+
     return (
         <div className={classes.grow}>
             <AppBar position="static">
@@ -117,6 +155,7 @@ function Navbar() {
                                 root: classes.inputRoot,
                                 input: classes.inputInput,
                             }}
+                            onChange={handleChange}
                         />
                     </div>
                     <FormControl className={classes.formControl}>
@@ -127,12 +166,12 @@ function Navbar() {
                                     icon: classes.icon,
                                 },
                             }}
-                           defaultValue="-"
-                           value="-"
+                            defaultValue="0"
+                            value={search}
+                            onChange={handleSelect}
                         >
-                            <option value="-">-</option>
-                            <option value="brand">By Time</option>
-                            <option value="brand">By Brand</option>
+                            <option value="0">By Year</option>
+                            <option value="1">By Brand</option>
                         </Select>
                     </FormControl>
                     <div className={classes.grow}/>
@@ -151,16 +190,16 @@ function Navbar() {
                         </Link>
 
                         <Link to="/login">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            startIcon={<AccountCircle/>
-                            }
-                        >
-                            Login
-                        </Button>
-                       </Link>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.button}
+                                startIcon={<AccountCircle/>
+                                }
+                            >
+                                Login
+                            </Button>
+                        </Link>
                     </div>
                 </Toolbar>
             </AppBar>
@@ -168,4 +207,5 @@ function Navbar() {
     );
 }
 
-export default Navbar;
+
+export default connect()(Navbar);
