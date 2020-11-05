@@ -2,14 +2,21 @@
 
 #### Tech Stack
 
-<pre>
-  FrontEnd:
-  
-  NodeJS 10, ReactJs, React Material UI, gRPC
-</pre>
 
-<pre>
- BackEnd:
+#### FrontEnd:
   
-  Java, Kotlin, gRPC
-</pre>
+  * NodeJS 10
+  * ReactJs
+  * Redux
+  * React Material UI
+  * gRPC-web
+
+
+#### BackEnd:
+  
+  * Kotlin
+  * Java
+  * MongoDB
+  * gRPC
+  * TestContainers
+
