@@ -59,7 +59,7 @@ function AddCar() {
         car.setFuelconsumption(state.fuelConsumption);
 
         srv.addCar(car, {}, (err, response) => {
-            if (err || response.array[1] != undefined) {
+            if (err || response.array[1] !== undefined) {
                 setAlertMessage("Error: Car not saved!")
                 setSeverity("error")
                 setOpen(true)

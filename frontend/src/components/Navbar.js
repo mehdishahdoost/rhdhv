@@ -113,7 +113,7 @@ function Navbar(props) {
 
     function handleChange(evt) {
         const value = evt.target.value;
-        if (value.length > 2 || value.length == 0) {
+        if (value.length > 2 || value.length === 0) {
             var request = new CarRequest();
             request.setSearchtext(value);
             request.setFilter(search);
